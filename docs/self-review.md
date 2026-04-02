@@ -27,6 +27,8 @@
 Issue:
 - Deductible scenario incorrectly returned VALID instead of DEDUCTIBLE_APPLIED
 
+float vs decimal
+- Used Decimal over Float The DECIMAL type is required for financial precision to avoid inaccuracies
 Cause:
 - ReimbursementRule overwrote upstream decision code
 

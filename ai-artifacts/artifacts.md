@@ -670,3 +670,9 @@ However:
 * System behavior was validated through testing
 
 This reflects a controlled and iterative engineering approach rather than blind AI usage.
+### Scope Decisions
+
+Diagnosis codes and provider-level adjudication were intentionally not modeled.  
+The system focuses on core coverage logic (service type, deductible, limits) to demonstrate adjudication behavior within the time constraint.
+
+In a production system, these would be additional dimensions in rule evaluation.
