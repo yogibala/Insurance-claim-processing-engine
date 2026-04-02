@@ -1,13 +1,13 @@
 from pydantic import BaseModel
 from app.utils.constants import AdjudicationCode
-
+from decimal import Decimal
 
 class FinancialBreakdown(BaseModel):
-    requested_amount: float
-    allowed_amount: float
-    deductible_applied: float
-    payable_amount: float
-    member_responsibility: float
+    requested_amount: Decimal
+    allowed_amount: Decimal
+    deductible_applied: Decimal
+    payable_amount: Decimal
+    member_responsibility: Decimal
 
 
 class AdjudicationResult(BaseModel):

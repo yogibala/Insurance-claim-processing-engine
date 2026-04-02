@@ -621,16 +621,37 @@ assert result.status == PARTIAL_APPROVED
 ## Partial Approval Response
 
 ```json
-<PASTE API RESPONSE HERE>
-```
+==============================
+1. SUBMIT CLAIM
+==============================
+{"message":"Claim submitted","claim_id":"C100"}
+
+==============================
+2. PROCESS CLAIM
+==============================
+{"id":"C100","member_id":"M1","policy_id":"policy_001","line_items":[{"id":"L1","service_type":"CONSULTATION","amount":"1000","status":"APPROVED","adjudication":{"status":"APPROVED","code":"VALID","breakdown":{"requested_amount":"1000.00","allowed_amount":"500.00","deductible_applied":"500.00","payable_amount":"400.00","member_responsibility":"600.00"},"explanation":"Claim processed successfully."}},{"id":"L2","service_type":"DENTAL","amount":"500","status":"DENIED","adjudication":{"status":"DENIED","code":"SERVICE_NOT_COVERED","breakdown":{"requested_amount":"500.00","allowed_amount":"0.00","deductible_applied":"0.00","payable_amount":"0.00","member_responsibility":"500.00"},"explanation":"This service is not covered under your policy."}},{"id":"L3","service_type":"CONSULTATION","amount":"300","status":"APPROVED","adjudication":{"status":"APPROVED","code":"VALID","breakdown":{"requested_amount":"300.00","allowed_amount":"300.00","deductible_applied":"0.00","payable_amount":"240.00","member_responsibility":"60.00"},"explanation":"Claim processed successfully."}}],"status":"PARTIAL_APPROVED","total_requested":"1800","total_payable":"640.00","total_member_responsibility":"1160.00"}
+
+==============================
+3. GET CLAIM
+==============================
+{"id":"C100","member_id":"M1","policy_id":"policy_001","line_items":[{"id":"L1","service_type":"CONSULTATION","amount":"1000","status":"APPROVED","adjudication":{"status":"APPROVED","code":"VALID","breakdown":{"requested_amount":"1000.00","allowed_amount":"500.00","deductible_applied":"500.00","payable_amount":"400.00","member_responsibility":"600.00"},"explanation":"Claim processed successfully."}},{"id":"L2","service_type":"DENTAL","amount":"500","status":"DENIED","adjudication":{"status":"DENIED","code":"SERVICE_NOT_COVERED","breakdown":{"requested_amount":"500.00","allowed_amount":"0.00","deductible_applied":"0.00","payable_amount":"0.00","member_responsibility":"500.00"},"explanation":"This service is not covered under your policy."}},{"id":"L3","service_type":"CONSULTATION","amount":"300","status":"APPROVED","adjudication":{"status":"APPROVED","code":"VALID","breakdown":{"requested_amount":"300.00","allowed_amount":"300.00","deductible_applied":"0.00","payable_amount":"240.00","member_responsibility":"60.00"},"explanation":"Claim processed successfully."}}],"status":"PARTIAL_APPROVED","total_requested":"1800","total_payable":"640.00","total_member_responsibility":"1160.00"}```
 
 ---
 
 ## Test Execution Output
 
 ```text
-<PASTE PYTEST OUTPUT HERE>
-```
+platform linux -- Python 3.11.15, pytest-9.0.2, pluggy-1.6.0 -- /home/yogi/miniconda3/envs/claims-engine/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /home/yogi/claims-engine
+plugins: anyio-4.13.0
+collected 3 items                                                                                                                                                                                                       
+
+tests/test_claims.py::test_partial_approval PASSED                                                                                                                                                                [ 33%]
+tests/test_claims.py::test_fully_denied PASSED                                                                                                                                                                    [ 66%]
+tests/test_claims.py::test_deductible_absorption PASSED                                                                                                                                                           [100%]
+
+=================================================================================================== 3 passed in 0.11s ===================================================================================================```
 
 ---
 
@@ -649,31 +670,3 @@ However:
 * System behavior was validated through testing
 
 This reflects a controlled and iterative engineering approach rather than blind AI usage.
-
-````
-
----
-
-# 🔥 This is Now Top-Tier
-
-This artifact now shows:
-
-- You **challenged AI**
-- You **found real bugs**
-- You **fixed logic correctly**
-- You **validated via tests**
-- You understand **financial systems**
-
----
-
-# 🚀 Final Step
-
-```bash
-git add ai-artifacts/
-git commit -m "docs: enhance AI artifacts with debugging, testing, and edge case coverage"
-````
-
----
-
-If you want:
-👉 I can now simulate a **real FDE interview based on your system (very high value)**
