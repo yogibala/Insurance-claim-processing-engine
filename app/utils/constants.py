@@ -1,0 +1,24 @@
+from enum import Enum
+
+
+class LineItemStatus(str, Enum):
+    PENDING = "PENDING"
+    APPROVED = "APPROVED"
+    DENIED = "DENIED"
+    NEEDS_REVIEW = "NEEDS_REVIEW"
+
+
+class ClaimStatus(str, Enum):
+    SUBMITTED = "SUBMITTED"
+    IN_REVIEW = "IN_REVIEW"
+    APPROVED = "APPROVED"
+    PARTIAL_APPROVED = "PARTIAL_APPROVED"
+    DENIED = "DENIED"
+    PAID = "PAID"
+
+
+class AdjudicationCode(str, Enum):
+    SERVICE_NOT_COVERED = "SERVICE_NOT_COVERED"
+    LIMIT_EXCEEDED = "LIMIT_EXCEEDED"
+    DEDUCTIBLE_APPLIED = "DEDUCTIBLE_APPLIED"
+    VALID = "VALID"
