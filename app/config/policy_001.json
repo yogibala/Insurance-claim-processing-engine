@@ -1,0 +1,14 @@
+{
+  "policy_id": "POLICY_001",
+  "deductible": 500,
+  "service_coverage": {
+    "CONSULTATION": {
+      "covered": true,
+      "limit": 1000,
+      "reimbursement_rate": 0.8
+    },
+    "DENTAL": {
+      "covered": false
+    }
+  }
+}
