@@ -1,5 +1,11 @@
 # Domain Model
 
+## Overview
+
+This system models an insurance claims adjudication workflow where each claim consists of multiple line items that are independently evaluated against policy rules. The system supports partial approvals, financial breakdowns, and transparent explanations.
+
+---
+
 ## Core Entities
 
 ### Claim
@@ -7,70 +13,93 @@
 Represents a reimbursement request submitted by a member.
 
 Attributes:
+- id
+- member_id
+- policy_id
+- status
+- line_items
+- total_requested
+- total_payable
+- total_member_responsibility
 
-* id
-* member_id
-* policy_id
-* status
-* line_items
-* total_requested
-* total_payable
+Behavior:
+- Aggregates line item decisions
+- Determines final claim status
 
 ---
 
-### Line Item
+### LineItem
 
 Represents an individual medical expense within a claim.
 
 Attributes:
+- id
+- service_type
+- amount (Decimal)
+- status
+- adjudication_result
 
-* id
-* service_type
-* amount
-* status
-* adjudication_result
+Behavior:
+- Independently adjudicated
+- Produces financial breakdown
 
 ---
 
 ### Policy
 
-Defines coverage rules for services.
+Defines coverage rules.
 
 Attributes:
-
-* deductible
-* service coverage rules
-* reimbursement rates
-* limits
+- deductible
+- service_coverage (per service type):
+  - covered (bool)
+  - limit (annual)
+  - reimbursement_rate
 
 ---
 
-### Usage Tracker
+### UsageTracker
 
-Tracks how much of a policy has been consumed.
+Tracks policy usage across claims.
 
 Attributes:
+- deductible_used
+- service_limits_used (per service)
 
-* deductible_used
-* service_limits_used
+Purpose:
+- Enables accurate limit and deductible enforcement
 
 ---
 
-## Financial Breakdown Model
+### FinancialBreakdown
 
-Each line item produces:
+Represents monetary outcome of adjudication.
 
-* requested_amount
-* allowed_amount
-* deductible_applied
-* payable_amount
-* member_responsibility
+Attributes:
+- requested_amount
+- allowed_amount
+- deductible_applied
+- payable_amount
+- member_responsibility
+
+All values use **Decimal** for precision.
+
+---
+
+## Adjudication Model
+
+Each LineItem produces:
+
+- status
+- adjudication code
+- financial breakdown
+- explanation
 
 ---
 
 ## State Machines
 
-### Line Item State Machine
+### LineItem State Machine
 
 PENDING → APPROVED | DENIED | NEEDS_REVIEW
 
@@ -85,29 +114,45 @@ SUBMITTED → IN_REVIEW → APPROVED | PARTIAL_APPROVED | DENIED → PAID
 ## Partial Approval Handling
 
 A claim is marked PARTIAL_APPROVED when:
-
-* Some line items are approved
-* Some are denied or partially paid
+- At least one line item is approved
+- At least one line item is denied or partially paid
 
 ---
 
-## Rule Execution Flow
+## Rule Execution Pipeline
 
-1. Coverage Check
-2. Deductible Application
-3. Limit Enforcement
-4. Reimbursement Calculation
+Rules are executed in order:
+
+1. CoverageRule → determines if service is covered
+2. DeductibleRule → applies remaining deductible
+3. LimitRule → enforces service limits
+4. ReimbursementRule → calculates payable amount
+
+---
+
+## Rule Precedence Principle
+
+Upstream rules define decision codes. Downstream rules must not override meaningful decisions.
+
+Example:
+- DeductibleRule sets `DEDUCTIBLE_APPLIED`
+- ReimbursementRule must not override it
 
 ---
 
 ## Explanation System
 
-Each adjudication decision produces:
+Each adjudication produces:
+- code (machine-readable)
+- explanation (human-readable)
 
-* decision code
-* human-readable explanation
+Implemented via ExplanationFactory.
 
-This ensures transparency and auditability.
+---
 
-```
-```
+## Financial Precision
+
+All monetary values use **Decimal** to:
+- Avoid floating point errors
+- Ensure deterministic calculations
+- Maintain financial correctness

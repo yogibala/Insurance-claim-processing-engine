@@ -2,27 +2,68 @@
 
 ## What Went Well
 
-* Clean domain separation
-* Deterministic rule engine
-* Strong explanation system
-* Handles partial approvals effectively
+- Clean domain separation (Claim vs LineItem)
+- Modular rule engine design
+- Accurate financial modeling using Decimal
+- Strong explanation system
+- Handles partial approvals correctly
+- Robust error handling in adjudication engine
+- Unit tests validate key scenarios
 
 ---
 
 ## What’s Rough
 
-* No persistent storage
-* Limited validation
-* No concurrency support
+- In-memory storage (no persistence)
+- No concurrency handling
+- Limited validation on inputs
+- Rule set is simplified
+- No API authentication
+
+---
+
+## Key Bug Identified & Fixed
+
+Issue:
+- Deductible scenario incorrectly returned VALID instead of DEDUCTIBLE_APPLIED
+
+Cause:
+- ReimbursementRule overwrote upstream decision code
+
+Fix:
+- Prevented downstream override of meaningful codes
+
+Learning:
+- Rule precedence is critical in decision systems
 
 ---
 
 ## What I Would Improve
 
-* Add database for usage tracking
-* Introduce rule DSL for more flexibility
-* Add appeal workflow
-* Improve test coverage
+- Add persistent storage (SQLite/Postgres)
+- Introduce rule configuration DSL
+- Add appeal workflow
+- Improve test coverage (edge cases)
+- Add structured logging
 
-```
-```
+---
+
+## What I Would Build Next
+
+- Appeals and dispute workflow
+- Provider-level coverage rules
+- Multi-policy support
+- Event-driven processing
+
+---
+
+## Final Reflection
+
+The system prioritizes:
+- correctness
+- clarity
+- explainability
+
+AI was used as a design assistant, but all outputs were reviewed, validated, and refined.
+
+The final system reflects deliberate engineering decisions rather than generated code.

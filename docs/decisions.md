@@ -2,57 +2,135 @@
 
 ## 1. Config-Driven Adjudication
 
-Policies are defined in JSON while the adjudication logic is implemented in deterministic code.
+Policies are defined in JSON while logic is implemented in deterministic code.
 
-This allows:
-
-* Flexibility in rule updates
-* Strong auditability
-
----
-
-## 2. Claim vs Line Item State Machines
-
-Separate state machines allow:
-
-* Partial approvals
-* Accurate lifecycle tracking
+Why:
+- Business rules change frequently
+- Enables non-code updates
+- Ensures auditability
 
 ---
 
-## 3. Explanation Factory
+## 2. Claim vs LineItem State Machines
 
-Decouples:
+Separate state machines were introduced.
 
-* Decision logic
-* User communication
-
----
-
-## 4. Financial Breakdown Model
-
-Introduced to handle:
-
-* Partial payments
-* Deductible tracking
-* Limit enforcement
+Why:
+- Enables partial approvals
+- Models real-world claim behavior
+- Avoids ambiguity in mixed outcomes
 
 ---
 
-## 5. Usage Tracking
+## 3. Rule Engine Design
 
-Tracks consumption across claims to ensure:
+A rule pipeline approach was used:
+- Coverage → Deductible → Limit → Reimbursement
 
-* Accurate limit enforcement
-* Realistic adjudication behavior
+Why:
+- Modular
+- Extensible
+- Easy to debug
+
+---
+
+## 4. Explanation System
+
+Implemented ExplanationFactory.
+
+Why:
+- Separates logic from communication
+- Ensures consistent messaging
+- Supports transparency
+
+---
+
+## 5. Financial Modeling
+
+Introduced FinancialBreakdown per line item.
+
+Why:
+- Required for partial approvals
+- Enables detailed visibility
+- Reflects real-world adjudication
+
+---
+
+## 6. Decimal for Monetary Values
+
+All financial calculations use Decimal instead of float.
+
+Why:
+- Avoid floating-point precision errors
+- Ensure correctness in financial systems
+
+---
+
+## 7. Engine Robustness
+
+Added:
+- Per-rule try-catch
+- Execution trace
+- SYSTEM_ERROR handling
+
+Why:
+- Prevent system crashes
+- Improve debuggability
+- Separate business vs system failures
+
+---
+
+## 8. Rule Precedence Fix
+
+Prevented downstream rules from overriding upstream decisions.
+
+Why:
+- Ensures explanation correctness
+- Preserves decision integrity
+
+---
+
+## 9. API Design
+
+Minimal endpoints:
+- POST /claims
+- POST /claims/{id}/process
+- GET /claims/{id}
+
+Why:
+- Meets assignment requirements
+- Keeps system simple
+
+---
+
+## 10. Testing Strategy
+
+Added unit tests for:
+- Partial approval
+- Full denial
+- Deductible absorption
+
+Why:
+- Validate correctness
+- Catch logic bugs (e.g., deductible issue)
 
 ---
 
 ## Trade-offs
 
-* No database (in-memory store used)
-* No concurrency handling
-* Limited rule set
+- No database (in-memory store used)
+- No concurrency handling
+- Limited rule set
+- No external integrations
 
-```
-```
+---
+
+## Scope Decisions
+
+Diagnosis codes and provider-level adjudication were intentionally not modeled.
+
+Reason:
+- Focus on core adjudication logic
+- Maintain clarity within time constraint
+
+In a production system, these would be additional rule dimensions.
