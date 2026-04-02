@@ -2,7 +2,6 @@ from app.adjudication.engine import AdjudicationEngine
 from app.adjudication.context import AdjudicationContext
 from app.config.loader import load_policy
 from app.domain import claim
-from app.domain import claim
 from app.domain.usage_tracker import UsageTracker
 from app.state_machine.claim_sm import ClaimStateMachine
 

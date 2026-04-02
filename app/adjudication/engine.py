@@ -7,6 +7,7 @@ from app.adjudication.rules import (
 )
 from app.domain.adjudication_result import AdjudicationResult, FinancialBreakdown
 from app.adjudication.explanations import ExplanationFactory
+from app.utils.constants import AdjudicationCode
 
 
 class AdjudicationEngine:
@@ -19,27 +20,40 @@ class AdjudicationEngine:
             ReimbursementRule()
         ]
 
-    def adjudicate(self, ctx: AdjudicationContext) -> AdjudicationResult:
+   def adjudicate(self, ctx: AdjudicationContext):
 
-        for rule in self.rules:
+    for rule in self.rules:
+        rule_name = rule.__class__.__name__
+
+        try:
+            before = ctx.allowed_amount
+
             ctx = rule.apply(ctx)
 
+            after = ctx.allowed_amount
+
+            # trace logging
+            ctx.trace.append({
+                "rule": rule_name,
+                "before": before,
+                "after": after,
+                "status": ctx.status,
+                "code": ctx.code
+            })
+
+            # business stop condition
             if ctx.status == "DENIED":
                 break
 
-        breakdown = FinancialBreakdown(
-            requested_amount=ctx.line_item.amount,
-            allowed_amount=ctx.allowed_amount,
-            deductible_applied=ctx.deductible_applied,
-            payable_amount=ctx.payable_amount,
-            member_responsibility=ctx.line_item.amount - ctx.payable_amount
-        )
+        except Exception as e:
+            # system failure (not business denial)
+            ctx.status = "NEEDS_REVIEW"
+            ctx.code = AdjudicationCode.SYSTEM_ERROR
+            ctx.error = str(e)
 
-        explanation = ExplanationFactory.get(ctx.code)
+            ctx.trace.append({
+                "rule": rule_name,
+                "error": str(e)
+            })
 
-        return AdjudicationResult(
-            status=ctx.status,
-            code=ctx.code,
-            breakdown=breakdown,
-            explanation=explanation
-        )
+            break

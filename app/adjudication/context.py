@@ -3,7 +3,6 @@ from app.domain.line_item import LineItem
 from app.domain.policy import Policy
 from app.domain.usage_tracker import UsageTracker
 
-
 class AdjudicationContext(BaseModel):
     line_item: LineItem
     policy: Policy
@@ -16,3 +15,5 @@ class AdjudicationContext(BaseModel):
 
     status: str = "PENDING"
     code: str = "VALID"
+    trace: list = []
+    error: str | None = None

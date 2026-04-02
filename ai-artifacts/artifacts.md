@@ -86,7 +86,28 @@ I implemented:
 
 ---
 
-# Phase 5: Explanation System
+# Phase 5: Improving Engine Robustness
+
+### Prompt
+The engine simply breaks when status is DENIED and has no try-catch. How do we make it more robust?
+
+### AI Response
+The assistant recommended:
+- Adding **per-rule try-catch blocks**
+- Introducing a **trace log for rule execution**
+- Distinguishing **business denial vs system failure**
+- Introducing a `SYSTEM_ERROR` code
+
+### Outcome
+I implemented:
+- Rule-level exception handling
+- Execution trace per rule
+- SYSTEM_ERROR → routed to NEEDS_REVIEW
+- Improved auditability and debuggability
+
+---
+
+# Phase 6: Explanation System
 
 ### Prompt
 How do I explain decisions clearly to users?
@@ -103,7 +124,7 @@ I implemented:
 
 ---
 
-# Phase 6: API Layer
+# Phase 7: API Layer
 
 ### Prompt
 What APIs are needed to meet assignment requirements?
@@ -122,7 +143,7 @@ I implemented:
 
 ---
 
-# Phase 7: Debugging & Issue Resolution
+# Phase 8: Debugging & Issue Resolution
 
 ### Prompt
 I encountered an import error: ModuleNotFoundError for explanations module.
@@ -143,7 +164,7 @@ I identified:
 
 ---
 
-# Phase 8: Scope & Prioritization
+# Phase 9: Scope & Prioritization
 
 ### Prompt
 Do I need to build a frontend?
@@ -160,7 +181,7 @@ I prioritized:
 
 ---
 
-# Phase 9: Git Strategy
+# Phase 10: Git Strategy
 
 ### Prompt
 How should I structure commits to reflect iterative development?
@@ -180,7 +201,7 @@ I created:
 
 ---
 
-# Phase 10: Documentation
+# Phase 11: Documentation
 
 ### Prompt
 How should I structure documentation for maximum impact?
@@ -205,6 +226,7 @@ I created:
 - Explanation systems are critical for user trust
 - Clean architecture > feature quantity
 - Small details (naming, structure) matter significantly
+- Robust systems must distinguish between business failures and system failures
 
 ---
 
@@ -216,8 +238,9 @@ I created:
   - debugging assistance
 - Did NOT blindly copy:
   - verified logic before implementation
-  - corrected errors (e.g., module naming)
+  - corrected errors (e.g., module naming, enum usage)
 - Iteratively refined system through dialogue
+- Improved AI suggestions where necessary (e.g., robustness improvements)
 
 ---
 
@@ -228,21 +251,31 @@ The final system:
 - Applies deductible and limits correctly
 - Provides explanation for every decision
 - Maintains clean domain separation
+- Includes rule-level traceability
+- Handles system errors gracefully
 - Is fully testable via API
 
 ---
+
 ## What AI Got Wrong
 
 - Initially suggested incorrect module naming (`explainations`)
 - I identified and corrected it to `explanations`
-- Ensured consistency across imports
-- The partial approved logic was wrongly implemented and I have fixed it
-- I explicitly made the code refactoring
+- Partial approval logic required refinement
+- Engine lacked robustness (no try-catch), which I improved
+- Enum usage initially inconsistent (strings vs enums)
 
-## What Stack I used
-- I used Python 3.11 for this project becuase of the stability, widely supported by libraries and fast enough
-- Used FastAPI to build api and used the inhouse swagger to test the API
-- And I used Conda to manage the environments ( Just a personal choice however it is also good to build using venv)
-This demonstrates active validation rather than blind acceptance.
+---
 
-This collaboration reflects a structured engineering approach using AI as a reasoning partner rather than a code generator.
+## What Stack I Used
+
+- Python 3.11 (chosen for stability, performance, and library compatibility)
+- FastAPI for API development
+- Swagger UI for testing and interaction
+- Conda for environment management (personal preference; venv also viable)
+
+---
+
+## Final Reflection
+
+This collaboration reflects a structured engineering approach where AI was used as a **thinking partner**, not just a code generator. I actively validated, corrected, and improved suggestions to ensure the final system is robust, explainable, and aligned with real-world domain constraints.
